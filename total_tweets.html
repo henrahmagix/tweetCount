@@ -1,8 +1,17 @@
 <html>
   <head>
     <title>Total tweets</title>
+    <style type="text/css">
+    /*
+    input {
+      float: left;
+      clear: both;
+    }
+    */
+    </style>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script type="text/javascript">
+    
 var getPage = new RegExp( /page=([^&])/ );
 var url = "http://search.twitter.com/search.json?q=";
 var search, page, pageTotal, tweets, loading;
@@ -11,9 +20,11 @@ var afterCounter = "</b>";
 var totalTweets = 0;
 
 function getTweets(search, page, pageTotal) {
-  $.getJSON(url + search + '&page=' + page + '&callback=?',
+  $.getJSON( url + search + '&page=' + page + '&callback=?',
     function(data) {
-      if(data.results.length != 0 && page != pageTotal) getData(data);
+      if( data.results.length != 0 && page != pageTotal ) {
+        getData(data);
+      }
       else {
         $('#totalTweets span').html(beforeCounter + totalTweets + afterCounter);
         totalTweets = 0;
@@ -32,11 +43,16 @@ function getData(data) {
 }
 
 function submitTerms() {
-  loading = true;
   search = $('#query').prop('value');
   page = $('#startPage').prop('value');
   pageTotal = $('#pageTotal').prop('value');
-  getTweets(search, page, pageTotal);
+  if( search != '' && page != 0 ) {
+    loading = true;
+    getTweets(search, page, pageTotal);
+  }
+  else {
+    alert('0 not allowed as start page');
+  }
 }
 
 function status() {
@@ -48,6 +64,7 @@ $(function() {
   loading = false;
   setInterval(status, 10);
 });
+
     </script>
   </head>
   <body>
@@ -56,11 +73,11 @@ $(function() {
       <label for="query">Search for: </label>
       <input id="query" name="query" type="text" />
       <br />
-      <label for="startPage">Start on what page: </label>
+      <label for="startPage">Start on what page (must be greater than 1) </label>
       <input id="startPage" name="startPage" type="text" value="1" />
       <br />
-      <label for="pageTotal">How many pages: </label>
-      <input id="pageTotal" name="pageTotal" type="text" />
+      <label for="pageTotal">How many pages (0 to search until no more results) </label>
+      <input id="pageTotal" name="pageTotal" type="text" value="0" />
       <input id="submit" name="submit" type="submit" value="Go" />
       <span>or press enter</span>
     </form>
