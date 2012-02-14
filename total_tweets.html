@@ -12,7 +12,7 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script type="text/javascript">
     
-var getPage = new RegExp( /page=([^&])/ );
+var getPage = new RegExp( /page=([^&]+)/ );
 var url = "http://search.twitter.com/search.json?q=";
 var search, page, pageTotal, tweets, loading;
 var beforeCounter = "<b>";
@@ -48,7 +48,6 @@ function getData(data) {
     return;
   }
   page = page[1];
-  console.log(page);
   totalTweets += tweets.length;
   getTweets(search, page, pageTotal);
 }
