@@ -27,20 +27,24 @@ function getTweets(search, page, pageTotal) {
         getData(data);
       }
       else {
-        $('#totalTweets span').html(beforeCounter + totalTweets + afterCounter);
-        $('#pagesDone span').html('');
-        totalTweets = 0;
-        loading = false;
+        showTotal();
       }
     }
   );
+}
+
+function showTotal() {
+  $('#totalTweets span').html(beforeCounter + totalTweets + afterCounter);
+  $('#pagesDone span').html('');
+  totalTweets = 0;
+  loading = false;
 }
 
 function getData(data) {
   tweets = data.results;
   page = getPage.exec(data.next_page);
   if( page == null ) {
-    alert('End of results (to be updated)');
+    showTotal();
     return;
   }
   page = page[1];
@@ -95,5 +99,6 @@ $(function() {
     <br />
     <div id="loading" style="display:none;">Loading!</div>
     <div id="pagesDone" style="display:none;">Pages done: <span></span></div>
+    <span style="display:none;">Do Electric Cars Pollute More Than Their Gasoline Counterparts</span>
   </body>
 </html>
