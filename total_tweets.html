@@ -23,10 +23,12 @@ function getTweets(search, page, pageTotal) {
   $.getJSON( url + search + '&page=' + page + '&callback=?',
     function(data) {
       if( data.results.length != 0 && page != pageTotal ) {
+        $('#pagesDone span').html(page);
         getData(data);
       }
       else {
         $('#totalTweets span').html(beforeCounter + totalTweets + afterCounter);
+        $('#pagesDone span').html('');
         totalTweets = 0;
         loading = false;
       }
@@ -36,28 +38,36 @@ function getTweets(search, page, pageTotal) {
 
 function getData(data) {
   tweets = data.results;
-  page = getPage.exec(data.next_page)[1];
+  page = getPage.exec(data.next_page);
+  if( page == null ) {
+    alert('End of results (to be updated)');
+    return;
+  }
+  page = page[1];
+  console.log(page);
   totalTweets += tweets.length;
-  $('#twitter').append(totalTweets);
   getTweets(search, page, pageTotal);
 }
 
 function submitTerms() {
-  search = $('#query').prop('value');
+  search = encodeURIComponent($('#query').prop('value'));
   page = $('#startPage').prop('value');
   pageTotal = $('#pageTotal').prop('value');
-  if( search != '' && page != 0 ) {
-    loading = true;
-    getTweets(search, page, pageTotal);
+  if( search == '' ) {
+    alert('Please enter search query');
+    return;
   }
-  else {
+  if( page == 0 ) {
     alert('0 not allowed as start page');
+    return;
   }
+  loading = true;
+  getTweets(search, page, pageTotal);
 }
 
 function status() {
-  if( loading ) $('#loading').show();
-  else $('#loading').hide();
+  if( loading ) $('#loading,#pagesDone').show();
+  else $('#loading,#pagesDone').hide();
 }
 
 $(function() {
@@ -84,5 +94,6 @@ $(function() {
     <div id="totalTweets">Total tweets: <span></span></div>
     <br />
     <div id="loading" style="display:none;">Loading!</div>
+    <div id="pagesDone" style="display:none;">Pages done: <span></span></div>
   </body>
 </html>
