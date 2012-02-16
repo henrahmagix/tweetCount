@@ -35,7 +35,7 @@ function getTweets(search, page, pageTotal) {
 
 function showTotal() {
   $('#totalTweets span').html(beforeCounter + totalTweets + afterCounter);
-  $('#pagesDone span').html('');
+  $('#pagesDone span').html('0');
   totalTweets = 0;
   loading = false;
 }
@@ -53,6 +53,8 @@ function getData(data) {
 }
 
 function submitTerms() {
+  $('#totalTweets span').html('');
+  $('#pagesDone span').html('0');
   search = encodeURIComponent($('#query').prop('value'));
   page = $('#startPage').prop('value');
   pageTotal = $('#pageTotal').prop('value');
