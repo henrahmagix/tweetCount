@@ -42,14 +42,14 @@ function showTotal() {
 
 function getData(data) {
   tweets = data.results;
-  page = getPage.exec(data.next_page);
-  if( page == null ) {
+  totalTweets += tweets.length;
+  nextPage = getPage.exec(data.next_page);
+  if( nextPage == null ) {
     showTotal();
     return;
   }
-  page = page[1];
-  totalTweets += tweets.length;
-  getTweets(search, page, pageTotal);
+  nextPage = page[1];
+  getTweets(search, nextPage, pageTotal);
 }
 
 function submitTerms() {
